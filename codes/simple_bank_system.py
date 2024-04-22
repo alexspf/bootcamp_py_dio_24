@@ -1,56 +1,68 @@
-import os
 import getpass
-
-
+import os 
 class UserData:
-    def __init__(self, name, statement, history, password_crypt):
+    def __init__(self, name: str, statement: float, history: list, password_crypt: str):
         self.name = name
         self.statement = statement
         self.history = history
         self.password_crypt = password_crypt
 
 
-Data_base = UserData('alex', 10000, [],'1234')
 
+###operations
 
-def deposit(user) -> None:
+def operation(user: UserData, option : int,) -> None:
+    match option:
+  
+            case 2:
+                deposit(user)
+                return True
+                
+            case 3:
+                withdraw(user)
+                return True
+        
+            case 4:
+                return user.history
+
+def deposit(user: UserData) -> None:
     """Option to deposit"""
-    value = get_option(1)
+    value = get_user_option(1, user)
     user.statement += value
     user.history.append(f'{user.name} deposited {value}')
 
-
-def withdraw(user) -> None:
+def withdraw(user: UserData) -> None:
     """Option for withdraw"""
-    value = get_option(2)
+    value = get_user_option(2, user)
     if value > user.statement + 500:  # fees :P
-        withdraw_error()
+        withdraw_error(user)
 
     elif value == 0:
-        operation(user)
+        operation_ui(user)
 
     else:
         user.statement -= value
         user.history.append(f'{user.name} withdrew {value}')
 
 
-def withdraw_error() -> None:
-    os.system('clear')
-    print('Insufficient balance to withdraw that amount, press any key to return to the menu')
+def withdraw_error(user: UserData) -> None:
+    clear()
+    print('Insufficient balance to withdraw that amount. Please try again.')
     withdraw(user)
 
-
-def statement(user) -> str:
+def statement(user: UserData) -> str:
     """Option for statement"""
     return f'Your balance is ${user.statement:.2f}'
 
 
-def get_option(get) -> float:
+
+##user interface
+def get_user_option(option: int, user: UserData) -> int:
     """Print options and get option for user"""
-    try:
-        match get:
-            case 0:  # centralize string :p
-                return float(input(f'''
+
+    match option:
+        case 0:  # centralize string :p
+            return int(input(f'''
 ==============================================================================
 Hello {user.name}, welcome to the Zecatatu Bank System
 ==============================================================================
@@ -63,46 +75,50 @@ Choose an option:
 ==========================
 '''))
 
-            case 1:
-                return float(input('How much do you want to deposit? $'))
+        case 1:
+            return float(input('How much do you want to deposit? $'))
 
-            case 2:
-                return float(input('How much do you want to withdraw? $'))
+        case 2:
+            return float(input('How much do you want to withdraw? $'))
 
-            case 3:
-                os.system('clear')
-                for x in user.history:
-                    print(f"{x}\n")
-                input('Press any key to exit\n')
-                return
+        
+        case _:
+            return get_user_option(0, user)
 
-    except Exception:
-        operation(user)
-
-
-def operation(user) -> None:
+def operation_ui(user: UserData)   -> None:
     while True:
-        get = 0
-        option = get_option(get)
+        option: int = get_user_option(0, user)
         match option:
             case 1:
-                os.system('clear')
+                clear()
                 print(statement(user))
 
             case 2:
-                deposit(user)
-                os.system('clear')
+                operation(user, 2)
+                clear()
 
             case 3:
-                withdraw(user)
-                os.system('clear')
+                operation(user, 3)
+                clear()
 
             case 4:
-                get_option(3)
-
+                clear()
+                
+                print('Transaction History:')
+                for x in operation(user, 4):
+                    print(f"{x}\n")
+                input('Press any key to exit\n')
+                clear()
+                
             case 5:
+                print("Thank you for using the Zecatatu Bank System. Goodbye!")
                 break
 
+def clear() -> None:
+    """Clear the console"""
+    os.system('clear')
+
+### login    
 
 def create_new_user() -> UserData:
     """Create a new user"""
@@ -110,10 +126,13 @@ def create_new_user() -> UserData:
     if name == Data_base.name:
         print("User already exists. Please try again.")
         return None
-    statement = float(input("Enter the initial balance: "))
+    try:
+        statement = float(input("Enter the initial balance: "))
+    except Exception:
+        print("Invalid balance. Please try again.")
+        return None 
     password = getpass.getpass("Enter the password: ")
-    history = []
-    return UserData(name, statement, history, password)
+    return UserData(name, statement, [], password)
 
 
 def login_or_create_user() -> UserData:
@@ -151,6 +170,12 @@ def user_login() -> UserData:
             print("Invalid password. Please try again.")
 
 
-if __name__ == "__main__":
-    user = login_or_create_user()
-    operation(user)
+  
+
+def start() -> None:
+    user: UserData = login_or_create_user()
+
+    operation_ui(user)
+
+Data_base = UserData('alex', 10000, [], '1234')
+start()
