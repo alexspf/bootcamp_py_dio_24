@@ -1,44 +1,48 @@
 import os
+import getpass
 
 
 class UserData:
-    def __init__(self, name, statement, history):
+    def __init__(self, name, statement, history, password_crypt):
         self.name = name
         self.statement = statement
         self.history = history
+        self.password_crypt = password_crypt
 
 
-user = UserData('zeca', 1000, [])  # is a simple bank, but implementation for user is here
+Data_base = UserData('alex', 10000, [],'1234')
 
 
-def deposit() -> None:
+def deposit(user) -> None:
     """Option to deposit"""
     value = get_option(1)
     user.statement += value
-    user.history.append(f'{user.name} depositou {value}')
+    user.history.append(f'{user.name} deposited {value}')
 
 
-def withdraw() -> None:
+def withdraw(user) -> None:
     """Option for withdraw"""
     value = get_option(2)
     if value > user.statement + 500:  # fees :P
-        withdraw_erro()
+        withdraw_error()
 
     elif value == 0:
-        operation()
+        operation(user)
 
     else:
         user.statement -= value
-        user.history.append(f'{user.name} sacou {value}')
+        user.history.append(f'{user.name} withdrew {value}')
 
-def withdraw_erro() -> None:
+
+def withdraw_error() -> None:
     os.system('clear')
-    print('Saldo insuficiente para sacar esse valor, pressione um valor vazio para voltar ao menu')
-    withdraw()
+    print('Insufficient balance to withdraw that amount, press any key to return to the menu')
+    withdraw(user)
 
-def statement() -> str:
+
+def statement(user) -> str:
     """Option for statement"""
-    return f'O seu saldo é R${user.statement:.2f}'
+    return f'Your balance is ${user.statement:.2f}'
 
 
 def get_option(get) -> float:
@@ -48,50 +52,49 @@ def get_option(get) -> float:
             case 0:  # centralize string :p
                 return float(input(f'''
 ==============================================================================
-Ola bien viendo {user.name} to sistema bancaro do zecatatu
+Hello {user.name}, welcome to the Zecatatu Bank System
 ==============================================================================
-Escolha zeca
-[1]Ver saldo
-[2]Depositar
-[3]Sacar
-[4]Historico de operações
-[5]Sair
+Choose an option:
+[1] View balance
+[2] Deposit
+[3] Withdraw
+[4] Transaction history
+[5] Exit
 ==========================
 '''))
 
             case 1:
-                return float(input('Quanto deseja depositar? R$'))
+                return float(input('How much do you want to deposit? $'))
 
             case 2:
-                return float(input('Quanto deseja sacar? R$'))
+                return float(input('How much do you want to withdraw? $'))
 
             case 3:
                 os.system('clear')
                 for x in user.history:
                     print(f"{x}\n")
-                input('Pressione uma tecla para sair\n')
+                input('Press any key to exit\n')
                 return
 
-
     except Exception:
-        operation()
+        operation(user)
 
 
-def operation() -> None:
+def operation(user) -> None:
     while True:
         get = 0
         option = get_option(get)
         match option:
             case 1:
                 os.system('clear')
-                print(statement())
+                print(statement(user))
 
             case 2:
-                deposit()
+                deposit(user)
                 os.system('clear')
 
             case 3:
-                withdraw()
+                withdraw(user)
                 os.system('clear')
 
             case 4:
@@ -99,7 +102,55 @@ def operation() -> None:
 
             case 5:
                 break
-         
 
 
-operation()
+def create_new_user() -> UserData:
+    """Create a new user"""
+    name = input("Enter the user's name: ")
+    if name == Data_base.name:
+        print("User already exists. Please try again.")
+        return None
+    statement = float(input("Enter the initial balance: "))
+    password = getpass.getpass("Enter the password: ")
+    history = []
+    return UserData(name, statement, history, password)
+
+
+def login_or_create_user() -> UserData:
+    """Login or create a new user"""
+    while True:
+        choice = input("Do you want to login or create a new user? (login/create): ")
+        if choice.lower() == "login":
+            return user_login()
+        elif choice.lower() == "create":
+            user = create_new_user()
+            if user is not None:
+                return user
+        elif choice == "0":
+            return create_new_user()
+        else:
+            print("Invalid choice. Please try again.")
+
+
+def user_login() -> UserData:
+    """Login with existing user"""
+    while True:
+        name = input("Enter the user's name: ")
+        if name != Data_base.name:
+            print("User not found. Please try again.")
+            continue
+        password = getpass.getpass("Enter the password: ")
+        if password == Data_base.password_crypt:
+            return UserData(
+                name,
+                Data_base.statement,
+                Data_base.history,
+                Data_base.password_crypt,
+            )
+        else:
+            print("Invalid password. Please try again.")
+
+
+if __name__ == "__main__":
+    user = login_or_create_user()
+    operation(user)
