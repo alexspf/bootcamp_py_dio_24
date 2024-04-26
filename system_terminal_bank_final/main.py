@@ -5,7 +5,6 @@ from modules.user_model import Data_base
 
 def start() -> None:
     user: UserData = login_or_create_user()
-
     operation_ui(user)
 
 start()

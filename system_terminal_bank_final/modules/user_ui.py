@@ -44,7 +44,6 @@ def operation_ui(user: UserData)   -> None:
 
             case 4:
                 clear()
-                
                 print('Transaction History:')
                 for x in operation(user, 4):
                     print(f"{x}\n")
