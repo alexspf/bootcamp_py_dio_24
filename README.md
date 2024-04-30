@@ -6,8 +6,6 @@
 
 Repository created in order to post challenges and exercises practiced by me during the **python back enginer bootcamp** of [Digital Innovation One](https://www.dio.me/).
 
-[![Link do Lab](https://img.shields.io/badge/▶-000?style=for-the-badge&logo=movie&logoColor=E94D5F)](https://web.dio.me/lab/desafio-de-projeto-contribuindo-em-um-projeto-open-source-no-github/learning/913f26fd-1018-4643-b59a-6356ea77dc2e) 
-[![Link do Lab](https://img.shields.io/badge/Acesse%20o%20Lab%20na%20Plataforma-E94D5F?style=for-the-badge)](https://web.dio.me/lab/desafio-de-projeto-contribuindo-em-um-projeto-open-source-no-github/learning/913f26fd-1018-4643-b59a-6356ea77dc2e)
 
 ## Objective 🎯
 I acquired knowledge, even though it's things I've come across for a long time, I believe that knowledge is something continuous. We must always go back to our roots for know again. 
