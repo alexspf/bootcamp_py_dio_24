@@ -8,8 +8,7 @@ Repository created in order to post challenges and exercises practiced by me dur
 
 
 ## Objective 🎯
-I acquired knowledge, even though it's things I've come across for a long time, I believe that knowledge is something continuous. We must always go back to our roots for know again. 
-
+I acquired knowledge, even though it's things I've come across for a long time, I believe that knowledge is something continuous. It's important to revisit our foundational knowledge regularly.
 ## Tools 🛠️
 [![GitHub](https://img.shields.io/badge/GitHub-000?style=for-the-badge&logo=github&logoColor=30A3DC)](https://docs.github.com/)
 [![Git](https://img.shields.io/badge/Git-000?style=for-the-badge&logo=git&logoColor=E94D5F)](https://git-scm.com/doc)
